@@ -1,6 +1,7 @@
 # Systematic Trading Framework
 
-[![GitHub](https://img.shields.io/badge/github-dikibagast/systematic--trading-blue)](https://github.com/dikibagast/systematic-trading)
+[![GitHub](https://img.shields.io/badge/github-dikibagast/systematic--trading--framework-blue)](https://github.com/dikibagast/systematic-trading-framework)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 An open-source backtesting framework for systematic trading strategies. Built for performance, accuracy, and institutional-grade validation through walk-forward optimization, Monte Carlo simulation, Island Volume Selection, and a Multi-Metric Standard.
 
@@ -96,7 +97,7 @@ The agent will understand the framework conventions, write the signal logic in P
 ### Step 1: Install Dependencies
 
 ```bash
-git clone https://github.com/dikibagast/systematic-trading.git
+git clone https://github.com/dikibagast/systematic-trading-framework.git
 cd systematic-trading
 pip install -r requirements.txt
 ```
@@ -1101,6 +1102,12 @@ python data/fetcher.py --symbol BTC/USDT:USDT --timeframe 15m 1h 4h
 | `docs/STRATEGY.md`        | Strategy development -- signal contract, config schema, indicator reference    | Creating or modifying strategies  |
 | `docs/FRAMEWORK.md`       | Framework architecture -- inter-module contracts, safe modification guidelines | Modifying engine, data, or config |
 | `docs/POSITION_SIZING.md` | Kelly Criterion -- formula, fractional Kelly, methodology, best practices      | Optimizing position sizing        |
+
+---
+
+## License
+
+Distributed under the MIT License. See [LICENSE](LICENSE) for more information.
 
 ---
 
