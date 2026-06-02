@@ -1,0 +1,96 @@
+name: "template_strategy"
+description: "Template for creating new strategies"
+
+pairs: ["BTC/USDT:USDT"]
+timeframe: "15m"
+
+params:
+  ema_short: 20
+  ema_long: 50
+  rsi_period: 14
+  rsi_oversold: 30
+  rsi_overbought: 70
+
+param_space:
+  ema_short: [10, 15, 20, 25, 30]
+  ema_long: [40, 50, 60, 70]
+  rsi_period: [10, 14, 20]
+  rsi_oversold: [25, 30, 35]
+  rsi_overbought: [65, 70, 75]
+
+position_sizing:
+  mode: "percent_equity"
+  percent_equity: 0.10
+  max_position_value: 50000
+
+optimization:
+  method: "grid"
+  objective: "sharpe"
+
+validation:
+  walk_forward:
+    # Duration-based windows (per IMPROVEMENT.md institutional standards)
+    train_days: 548 # ~1.5 years of crypto data for regime capture
+    test_days: 90 # Quarterly re-optimization cycle
+    holdout_pct: 0.10 # 10% True Holdout for final verification
+    min_trades_per_window: 30
+    param_selection_method: "island_volume" # auto, frequency, kmeans, island_volume
+    window_selection_method: "ivs" # Options: 'best', 'ivs', 'stability', 'multi_objective'
+
+    # IVS method config
+    ivs:
+      min_threshold: 0.0 # Min Sharpe to consider profitable (0 = dynamic: top 80%)
+
+    # Stability method config
+    stability:
+      top_n: 5 # Number of top params to check for stability
+      perturbation_pct: 0.1 # Percentage to perturb params (±10%)
+
+    # Multi-objective method config
+    multi_objective:
+      stability_weight: 0.3 # Weight for stability (0-1, 0=Sharpe only, 1=equal weight)
+
+  # Monte Carlo stress test settings
+  monte_carlo:
+    n_simulations: 10000 # Statistical significance threshold
+    skip_pct: 0.10 # 10% execution failure simulation
+    slippage_pip: 1.0 # 1 pip slippage stress
+    entry_delay_bars: 1 # 1-bar execution delay
+    pip_value: 0.0001
+    max_dd_increase_pct: 25.0 # Robustness threshold
+
+  # Multi-Metric Standard validation thresholds (11 metrics)
+  multi_metric_standard:
+    # Performance Metrics
+    sharpe_min: 1.0
+    sortino_min: 1.0
+    calmar_min: 1.0
+    cagr_min_pct: 10.0
+
+    # Risk Metrics
+    max_drawdown_max_pct: 30.0
+
+    # Trade Metrics
+    recovery_factor_min: 2.0
+    profit_factor_min: 1.5
+    win_rate_min_pct: 30.0
+    expectancy_min: 0.0
+
+    # Stability Metrics
+    wfe_min_pct: 50.0
+    cv_max_pct: 20.0
+
+    # Pass/Fail Criteria
+    conditional_min_pct: 75.0
+
+order_management:
+  entry:
+    type: "market"
+  take_profit:
+    type: "atr_multiple"
+    value: 2.0
+  stop_loss:
+    type: "atr_multiple"
+    value: 1.0
+  trailing_stop:
+    enabled: false

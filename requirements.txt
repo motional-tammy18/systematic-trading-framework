@@ -1,0 +1,14 @@
+ccxt>=4.0.0
+numpy==2.3
+plotly>=5.19.0
+pandas>=2.0.0
+polars
+polars-ta
+pyyaml
+requests
+rich
+scipy
+streamlit>=1.30.0
+tqdm>=4.65.0
+ruptures
+hmmlearn>=0.3.0

@@ -1,0 +1,146 @@
+exchange:
+  name: "bybit"
+
+data:
+  storage_path: "data/raw"
+  default_timeframes: ["15m", "1h", "4h"]
+  max_history_days: 3650
+
+system:
+  # Maximum CPU cores to use for multiprocessing (leave some for other tasks)
+  # Set to null to use auto-detect (recommended: cpu_count - 1)
+  # Or set to a specific integer (e.g., 4) to limit workers
+  max_workers: null # null = auto-detect (cpu_count - 1), or set integer
+
+backtest:
+  initial_capital: 10000
+  maker_fee: 0.0002 # 0.02%
+  taker_fee: 0.00055 # 0.055%
+  slippage_pct: 0.00005
+  max_drawdown_pct: 0.25 # Circuit breaker
+
+position_sizing:
+  default_mode: "percent_equity" # "fixed_amount" | "percent_equity"
+  fixed_amount: 1000
+  percent_equity: 0.10
+  max_position_value: 50000
+
+validation:
+  walk_forward:
+    # Duration-based windows (per IMPROVEMENT.md institutional standards)
+    train_days: 548 # ~1.5 years of crypto data for regime capture
+    test_days: 90 # Quarterly re-optimization cycle
+    holdout_pct: 0.10 # 10% True Holdout for final verification
+    min_trades_per_window: 30
+    param_selection_method: "island_volume" # island_volume, frequency, or kmeans
+    window_selection_method: "ivs" # Options: 'best', 'ivs', 'stability', 'multi_objective'
+
+  # WFO Robustness checks thresholds
+  wfo_robustness:
+    consistency_min_pct: 70.0 # % of profitable windows required
+    mean_performance_min_sharpe: 1.0 # Minimum mean OOS Sharpe
+    performance_stability_max_cv: 1.0 # Maximum Sharpe coefficient of variation
+    parameter_stability_max_cv: 0.5 # CV threshold for unstable parameter detection
+    flat_region_min_score: 0.7 # Minimum flat region score
+    conditional_min_pct: 80.0 # % of checks for CONDITIONAL verdict
+
+  # Monte Carlo stress test settings
+  monte_carlo:
+    n_simulations: 10000 # Statistical significance threshold
+    skip_pct: 0.10 # 10% execution failure simulation
+    slippage_pip: 5.0 # 1 pip slippage stress
+    entry_delay_bars: 1 # 1-bar execution delay
+    pip_value: 0.1 # Value of 1 pip
+    percentile_95_dd_max_pct: 25.0 # Maximum 95th percentile drawdown
+    dd_increase_fail_pct: 25.0 # DD increase % for FAIL grade
+    dd_increase_marginal_pct: 15.0 # DD increase % for MARGINAL grade
+    max_dd_increase_pct: 25.0 # Legacy: same as percentile_95_dd_max_pct
+
+  # Multi-Metric Standard validation thresholds (formerly 8-Metric, now 11 metrics)
+  multi_metric_standard:
+    # Performance Metrics
+    sharpe_min: 1.0 # Sharpe Ratio > 1.0
+    sortino_min: 1.0 # Sortino Ratio > 1.0 (downside risk only)
+    calmar_min: 1.0 # Calmar Ratio > 1.0 (CAGR / Max DD)
+    cagr_min_pct: 10.0 # Minimum annualized return > 10%
+
+    # Risk Metrics
+    max_drawdown_max_pct: 30.0 # Max Drawdown < 30%
+
+    # Trade Metrics
+    recovery_factor_min: 2.0 # Recovery Factor > 2.0
+    profit_factor_min: 1.5 # Profit Factor > 1.5
+    win_rate_min_pct: 30.0 # Win Rate > 30%
+    expectancy_min: 0.0 # Expected Value > 0
+
+    # Stability Metrics
+    wfe_min_pct: 50.0 # Walk Forward Efficiency > 50%
+    cv_max_pct: 20.0 # Coefficient of Variation < 20%
+
+    # Pass/Fail Criteria
+    conditional_min_pct: 75.0 # % of metrics for CONDITIONAL verdict
+
+  # Holdout validation thresholds
+  holdout:
+    sharpe_min: 1.0 # Minimum Sharpe ratio for holdout period
+    max_drawdown_max_pct: 30.0 # Maximum drawdown for holdout period
+
+  # Statistical reliability checks for WFO
+  statistical_checks:
+    enabled: true # Enable diagnostic statistical checks
+
+    # Minimum sample size validation
+    min_trades_for_power: 50 # Minimum trades required for 80% statistical power
+    min_sharpe_effect_size: 0.5 # Cohen's d for Sharpe=1.5 detection
+
+    # Window independence testing (Ljung-Box)
+    test_window_independence: true
+    ljung_box_max_lags: 10 # Number of lags for autocorrelation test
+    ljung_box_alpha: 0.05 # Significance level
+
+    # Regime heterogeneity detection
+    test_regime_homogeneity: true
+    regime_detection_method: "pelt" # pelt, cusum, or zivot_andrews
+    min_regime_bars: 1000 # Minimum bars per regime
+
+    # Meta-overfitting permutation test
+    test_meta_overfitting: true
+    permutation_iterations: 100 # Number of permutations for null distribution
+    meta_overfit_alpha: 0.05 # Significance level
+
+    # Warning thresholds (log warnings but don't fail validation)
+    warnings:
+      low_statistical_power: true
+      regime_mixing_detected: true
+      window_autocorrelation: true
+      parameter_instability: true
+      meta_overfitting: true
+
+    # Strict failure thresholds (fail validation if exceeded)
+    strict_thresholds:
+      max_parameter_cv: 0.5 # Maximum coefficient of variation for parameters
+      max_window_autocorr_p: 0.05 # Ljung-Box p-value threshold
+      min_flat_region_score: 0.7 # Minimum flat region robustness score
+
+order_management:
+  bar_fill_assumption: "pessimistic" # "pessimistic" | "optimistic" | "random"
+
+position_sizing_optimization:
+  enabled: true
+
+  # Kelly Criterion settings
+  kelly:
+    enabled: true
+    default_fraction: 0.25 # Quarter Kelly (75% of growth, 25% of volatility)
+    max_fraction: 0.5 # Half Kelly max (safety limit)
+
+  # Optimization targets
+  optimization:
+    objective: "calmar" # calmar (CAGR/MaxDD), cagr, kelly
+    risk_tolerance: 1.0 # Higher = more aggressive (0.5 to 2.0)
+
+  # Constraints
+  constraints:
+    max_position_pct: 0.25 # Max 25% of equity per position
+    min_trades: 100 # Minimum trades for reliable Kelly
+    max_total_exposure: 1.0 # Max total exposure (100% of equity)

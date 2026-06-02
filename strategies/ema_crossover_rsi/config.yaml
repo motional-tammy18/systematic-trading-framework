@@ -1,0 +1,85 @@
+description: EMA crossover with RSI filter - smoke test strategy
+name: ema_crossover_rsi
+optimization:
+  method: grid
+  objective: sharpe
+pairs:
+  - BTC/USDT:USDT
+param_space:
+  ema_long:
+    - 50
+    - 100
+    - 150
+  ema_short:
+    - 5
+    - 10
+    - 20
+    - 30
+    - 40
+  rsi_entry_offset:
+    - 0
+    - 5
+    - 10
+  rsi_exit_offset:
+    - 20
+    - 30
+  rsi_period:
+    - 4
+    - 8
+    - 14
+    - 21
+  trend_slope_lookback:
+    - 4
+    - 16
+    - 24
+    - 48
+  trend_separation_mult:
+    - 0.5
+    - 1.0
+    - 2.0
+params:
+  ema_long: 100
+  ema_short: 50
+  rsi_entry_offset: 10
+  rsi_exit_offset: 30
+  rsi_period: 14
+  trend_slope_lookback: 21
+  trend_separation_mult: 2.0
+position_sizing:
+  fixed_amount: 500
+  mode: percent_equity
+  percent_equity: 0.45
+timeframe: 1h
+validation:
+  monte_carlo:
+    entry_delay_bars: 1
+    max_dd_increase_pct: 25.0
+    n_simulations: 10000
+    pip_value: 0.1
+    skip_pct: 0.1
+    slippage_pip: 1.0
+  multi_metric_standard:
+    cagr_min_pct: 10.0
+    calmar_min: 1.0
+    conditional_min_pct: 75.0
+    cv_max_pct: 20.0
+    expectancy_min: 0.0
+    max_drawdown_max_pct: 30.0
+    profit_factor_min: 1.5
+    recovery_factor_min: 2.0
+    sharpe_min: 1.0
+    sortino_min: 1.0
+    wfe_min_pct: 50.0
+    win_rate_min_pct: 30.0
+  walk_forward:
+    holdout_pct: 0.1
+    min_trades_per_window: 30
+    param_selection_method: "island_volume"
+    test_days: 90
+    train_days: 360
+    window_selection_method: "ivs" # Options: 'best', 'ivs', 'stability', 'multi_objective'
+order_management:
+  entry:
+    type: "market"
+  trailing_stop:
+    enabled: false
