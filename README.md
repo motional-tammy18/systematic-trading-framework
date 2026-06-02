@@ -26,6 +26,7 @@ This framework is designed for:
 - [Configurable and Customization](#configurable-and-customization)
 - [Interactive Visualization Dashboard](#interactive-visualization-dashboard)
 - [Adding a New Strategy](#adding-a-new-strategy)
+- [Contributing](#contributing)
 - [Quick Reference](#quick-reference)
 - [Documentation](#documentation)
 
@@ -1059,6 +1060,12 @@ python run.py --strategy my_new_strategy --mode validate    # Full validation
 
 ---
 
+## Contributing
+
+Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for the full guide on development setup, coding standards, pull request process, and strategy development workflow. All contributors are expected to follow the [Code of Conduct](CODE_OF_CONDUCT.md).
+
+---
+
 ## Quick Reference
 
 | Command                                                         | Description                                |
@@ -1099,6 +1106,8 @@ python data/fetcher.py --symbol BTC/USDT:USDT --timeframe 15m 1h 4h
 | Document                  | Purpose                                                                        | Read When                         |
 | ------------------------- | ------------------------------------------------------------------------------ | --------------------------------- |
 | `AGENTS.md`               | AI agent router -- mode routing, code style, hard rules                        | First -- always                   |
+| `CONTRIBUTING.md`         | Contribution guidelines -- setup, coding standards, PR process                 | Before submitting a PR            |
+| `CODE_OF_CONDUCT.md`      | Community standards and enforcement guidelines                                 | Before participating              |
 | `docs/STRATEGY.md`        | Strategy development -- signal contract, config schema, indicator reference    | Creating or modifying strategies  |
 | `docs/FRAMEWORK.md`       | Framework architecture -- inter-module contracts, safe modification guidelines | Modifying engine, data, or config |
 | `docs/POSITION_SIZING.md` | Kelly Criterion -- formula, fractional Kelly, methodology, best practices      | Optimizing position sizing        |
